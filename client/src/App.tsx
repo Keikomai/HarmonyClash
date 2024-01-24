@@ -31,9 +31,7 @@ function App() {
   return (
     <Root>
       <Container>
-        <Header className="header">
-          Welcome to (I haven't come up with a name for this game)
-        </Header>
+        <Header className="header">Welcome Kate</Header>
         {isShowCard ? (
           <Suspense fallback={<Loader />}>
             <RandomCard images={imagePack} returnBack={handleBack} />
