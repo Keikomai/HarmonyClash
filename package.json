@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "client": "yarn workspace @harmonyclash/client run dev",
+    "client:build": "yarn workspace @harmonyclash/client run build",
     "server": "yarn workspace @harmonyclash/server run start",
     "lint": "eslint './**/src/**/*.{ts,tsx}'",
     "lint:fix": "eslint './**/src/**/*.{ts,tsx}' --fix"

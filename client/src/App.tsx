@@ -1,4 +1,4 @@
-import { Suspense, lazy, memo, useCallback, useState } from 'react'
+import { Suspense, lazy, useCallback, useState } from 'react'
 import styled from '@emotion/styled'
 
 import Button from './components/_atoms/Button'
@@ -67,7 +67,7 @@ const Root = styled('div')`
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  background-attachment: fixed; 
+  background-attachment: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
