@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="root" id="root">
+      <h1 class="header">
+        Welcome to (I haven't come up with a name for this game)
+      </h1>
+      <div class="button__container">
+        <button onclick="generateCards()" role="button" class="button">
+          Generate the cards
+        </button>
+        <div>
+          <label for="fileInput" id="chooseButton" class="button"
+            >Choose Files</label
+          >
+          <input
+            type="file"
+            id="fileInput"
+            accept=".zip"
+            multiple
+            onchange="getZipContents()"
+          />
+        </div>
+
+        <button disabled role="button" class="button">
+          Play game (Coming soon...)
+        </button>
+      </div>
+    </main>
+    <script src="dobble.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+  </body>
+</html>
