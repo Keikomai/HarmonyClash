@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - '5435:5432'
+    environment:
+      POSTGRES_USER: tutoreng
+      POSTGRES_PASSWORD: tutoreng-pass
+      POSTGRES_DB: tutorneg
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@test.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - '5051:80'
