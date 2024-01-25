@@ -1,0 +1,5 @@
+mongo-data-4.4/
+node_modules/
+node_modules/
+.DS_Store
+.env
