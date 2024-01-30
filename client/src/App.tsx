@@ -7,11 +7,13 @@ import { getZipContents } from './helper/render'
 import defaultImages from './assets/image'
 import Loader from './components/_atoms/Loader/Loader'
 import background from './assets/image/background.jpg'
+import ChatApp from './components/_features/Chat/Chat'
 
 const RandomCard = lazy(() => import('./components/_molecules/RandomCard'))
 
 function App() {
   const [isShowCard, setIsShowCard] = useState<boolean>(false)
+  const [isOpenChat, setIsOpenChat] = useState<boolean>(false)
   const [imagePack, setImagePack] =
     useState<Record<number, string>>(defaultImages)
 
@@ -31,25 +33,32 @@ function App() {
   return (
     <Root>
       <Container>
-        <Header className="header">Welcome Kate</Header>
-        {isShowCard ? (
-          <Suspense fallback={<Loader />}>
-            <RandomCard images={imagePack} returnBack={handleBack} />
-          </Suspense>
+        {isOpenChat ? (
+          <ChatApp />
         ) : (
-          <ButtonContainer>
-            <Button
-              onClick={() => setIsShowCard(true)}
-              buttonText="Generate the cards"
-            />
-            <Select onChange={handleChose} />
+          <>
+            <Header className="header">Welcome Kate</Header>
+            {isShowCard ? (
+              <Suspense fallback={<Loader />}>
+                <RandomCard images={imagePack} returnBack={handleBack} />
+              </Suspense>
+            ) : (
+              <ButtonContainer>
+                <Button
+                  onClick={() => setIsShowCard(true)}
+                  buttonText="Generate the cards"
+                />
+                <Select onChange={handleChose} />
 
-            <Button
-              disabled
-              buttonText="Play game (Coming soon...)"
-              onClick={() => {}}
-            />
-          </ButtonContainer>
+                <Button
+                  buttonText="Play game (Coming soon...)"
+                  onClick={() => {
+                    setIsOpenChat(true)
+                  }}
+                />
+              </ButtonContainer>
+            )}
+          </>
         )}
       </Container>
     </Root>
