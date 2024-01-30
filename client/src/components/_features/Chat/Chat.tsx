@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { socket } from '../../../socket'
 import ConnectionState from './ConnectionState'
 import ConnectionManager from './ConnectionManager'
-import MyForm from './MyForm'
-import ChatMessages from './ChatMessages'
+import Room from './Room'
 
 const ChatApp: React.FC = () => {
   const [isConnected, setIsConnected] = useState<boolean>(socket.connected)
@@ -30,8 +29,7 @@ const ChatApp: React.FC = () => {
     <div>
       <ConnectionState isConnected={isConnected} />
       <ConnectionManager />
-      <ChatMessages />
-      <MyForm />
+      {isConnected && <Room />}
     </div>
   )
 }

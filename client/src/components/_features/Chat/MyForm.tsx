@@ -1,16 +1,20 @@
 import React, { useCallback, useState, ChangeEvent, FormEvent } from 'react'
 import { socket } from '../../../socket'
 
-const MyForm: React.FC = () => {
+type MyFormProps = {
+  roomId: string
+}
+
+const MyForm: React.FC<MyFormProps> = ({ roomId }) => {
   const [value, setValue] = useState<string>('')
 
   const onSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault()
-
-      socket.emit('chat/newMessage', value)
+      socket.emit('chat/newMessage', roomId, value)
+      setValue('')
     },
-    [value],
+    [roomId, value],
   )
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {

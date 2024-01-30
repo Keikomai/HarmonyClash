@@ -13,6 +13,8 @@ type ChatHistory = {
   timestamp: number;
 };
 
+const chatRooms: Record<string, ChatHistory[]> = {};
+
 const io = new Server(server, {
   cors: {
     origin: 'http://localhost:5173',
@@ -30,7 +32,6 @@ app.get('/', (req, res) => {
 app.use(express.static('public'));
 app.use(express.json());
 
-const chatHistory: ChatHistory[] = [];
 const users: Record<string, string> = {};
 
 let counter: number = 0;
@@ -38,33 +39,59 @@ let counter: number = 0;
 io.on('connection', (socket) => {
   console.log('User connected');
 
-  socket.on('user/join', (userName) => {
-    console.log(`Hello ${userName}`);
+  socket.on('room/join', (roomId, userName) => {
+    console.log(`${userName} joined room ${roomId}`);
+
+    if (!chatRooms[roomId]) {
+      console.log(chatRooms, 'chatRooms');
+      console.log(roomId, 'chatRooms roomId');
+      chatRooms[roomId] = [];
+    }
 
     users[socket.id] = userName;
+    console.log(users[socket.id], 'users[socket.id]');
+    socket.join(roomId);
 
-    socket.emit('user/joinChatSuccess', `${userName} - you connected to chat`);
+    socket.emit(
+      'user/joinChatSuccess',
+      `${userName} - you connected to room ${roomId}`,
+    );
 
-    socket.emit('user/connected', chatHistory);
+    socket.emit('user/connected', chatRooms[roomId]);
 
     counter += 1;
     io.emit('user/count', counter);
 
-    socket.broadcast.emit('chat/userJoined', `${userName} connected to chat`);
+    io.to(roomId).emit(
+      'chat/userJoined',
+      `${userName} connected to room ${roomId}`,
+    );
+    console.log(chatRooms[roomId], 'chatRooms');
+    socket.emit('user/allMessages', chatRooms[roomId]);
   });
 
-  socket.on('chat/newMessage', (message) => {
-    console.log(`New message: ${message}`);
+  socket.on('room/create', (roomId) => {
+    console.log(roomId, 'Room has been created');
 
+    socket.emit('room/created', roomId);
+  });
+
+  socket.on('chat/newMessage', (roomId, message) => {
+    console.log(`New message in room ${roomId}: ${message}`);
+    console.log(users, 'usr');
     const entry = {
       author: users[socket.id],
       message,
       timestamp: Date.now(),
     };
 
-    chatHistory.push(entry);
-    io.emit('chat/newMessage', entry);
-    socket.emit('user/allMessages', chatHistory);
+    if (!chatRooms[roomId]) {
+      chatRooms[roomId] = [];
+    }
+
+    chatRooms[roomId].push(entry);
+    io.to(roomId).emit('chat/newMessage', entry);
+    socket.emit('user/allMessages', chatRooms[roomId]);
   });
 
   socket.on('disconnect', () => {
